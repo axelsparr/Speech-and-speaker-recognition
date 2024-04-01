@@ -11,9 +11,9 @@ def tidigit2labels(tidigitsarray):
     nex = len(tidigitsarray)
     for ex in range(nex):
         labels.append(tidigitsarray[ex]['gender'] + '_' + 
-                      tidigitsarray[ex]['speaker'] + '_' + 
-                      tidigitsarray[ex]['digit'] + '_' + 
-                      tidigitsarray[ex]['repetition'])
+                      #tidigitsarray[ex]['speaker'] + '_' + 
+                      tidigitsarray[ex]['digit'] + '_') 
+                      #tidigitsarray[ex]['repetition'])
     return labels
 
 def dither(samples, level=1.0):
@@ -32,7 +32,7 @@ def dither(samples, level=1.0):
 
 def lifter(mfcc, lifter=22):
     """
-    Applies liftering to improve the relative range of MFCC coefficients.
+    Applies liftering to improve the relative range of MFCC coefficients. Amplifies/attenuates certain parts based on a sin wave.
 
        mfcc: NxM matrix where N is the number of frames and M the number of MFCC coefficients
        lifter: lifering coefficient
