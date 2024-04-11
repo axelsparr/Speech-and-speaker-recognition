@@ -1,5 +1,5 @@
 import numpy as np
-from tools2 import *
+
 
 def concatTwoHMMs(hmm1, hmm2):
    """ Concatenates 2 HMM models
@@ -27,6 +27,10 @@ def concatTwoHMMs(hmm1, hmm2):
     Example:
        twoHMMs = concatHMMs(phoneHMMs['sil'], phoneHMMs['ow'])
     """
+   try:
+     hmm1["means"]
+   except:
+       print(hmm1)
    #startprob
    M1 = len(hmm1["startprob"])
    M2 = len(hmm2["startprob"])
@@ -35,7 +39,7 @@ def concatTwoHMMs(hmm1, hmm2):
       if i<M1-1:
          startprob_conc[i]=hmm1["startprob"][i]
       else:
-         startprob_conc[i]=hmm1["startprob"][-1]*hmm2["startprob"][i-M2]
+         startprob_conc[i]=hmm1["startprob"][-1]*hmm2["startprob"][i-M1]
 
          
    #transmat
@@ -61,7 +65,7 @@ def concatTwoHMMs(hmm1, hmm2):
 
    return {"startprob": startprob_conc,
            "transmat": transmat_conc,
-           "mean": mean_conc,
+           "means": mean_conc,
            "covars": covars_conc,
            "name": hmm1["name"] +"_"+hmm2["name"]
            }
@@ -127,6 +131,18 @@ def forward(log_emlik, log_startprob, log_transmat):
     Output:
         forward_prob: NxM array of forward log probabilities for each of the M states in the model
     """
+    N,M = log_emlik.shape()
+
+    alpha = np.zeros(N,M)
+    alpha[0,:] = log_startprob[:-1]+log_emlik[0,:] #inte helt 100 
+
+    for i in range(1,N):
+        for j in range(1,M):
+            alpha[i,j] = np.sum(alpha[i-1,j]*log_transmat[i,j])*log_emlik[i,j] #inte alls 100
+            
+    
+    
+
 
 def backward(log_emlik, log_startprob, log_transmat):
     """Backward (beta) probabilities in log domain.
