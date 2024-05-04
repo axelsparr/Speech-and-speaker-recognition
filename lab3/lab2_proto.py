@@ -171,6 +171,38 @@ def viterbi(log_emlik, log_startprob, log_transmat, forceFinalState=True):
         viterbi_path: best path
     """
 
+    N,M = log_emlik.shape
+
+    #alpha in the log domain technically "logalpha"
+    V = -np.inf * np.ones((N,M))
+    B = -np.inf * np.ones((N,M)) 
+
+    #first row of V and B 
+    for j in range(M):
+        V[0,j] = log_startprob[j]+log_emlik[0,j]
+        B[0,j] = -np.inf
+
+    for n in range(1,N):
+        for j in range(0,M):
+            V[n,j] = np.max(V[n-1,:]+log_transmat[:-1,j])+log_emlik[n,j]
+            B[n,j] = np.argmax(V[n-1,:]+log_transmat[:-1,j]) 
+
+    viterbi_loglik = max(V[-1,:])
+    if forceFinalState:
+        sT = M-1
+    else: 
+        sT = np.argmax(B[-1,:]) 
+
+    #print(pd.DataFrame(V))
+    viterbi_path = np.zeros(N,dtype=np.int64) 
+    viterbi_path[-1] = sT
+
+    #backing 
+    for n in range(N-2,-1,-1): #-1 in the middle because range excludes the last value
+        viterbi_path[n] = B[n+1,viterbi_path[n+1]]  
+
+    return viterbi_loglik, viterbi_path 
+
 def statePosteriors(log_alpha, log_beta):
     """State posterior (gamma) probabilities in log domain.
 
