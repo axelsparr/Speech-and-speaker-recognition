@@ -8,14 +8,6 @@ lab4/test-clean.tar.gz
 lab4/train-clean.tar.gz
 lab4/train-clean-100.tar.gz
 lab4/dev-clean.tar.gz
-lab4/checkpoints/epoch-0.pt
-lab4/checkpoints/epoch-1.pt
-lab4/checkpoints/epoch-2.pt
-lab4/checkpoints/epoch-3.pt
-lab4/checkpoints/epoch-4.pt
-lab4/checkpoints/epoch-5.pt
-lab4/checkpoints/epoch-6.pt
-lab4/checkpoints/epoch-7.pt
-lab4/checkpoints/epoch-8.pt
-lab4/checkpoints/epoch-9.pt
+lab4/checkpoints/*
+lab4/NVIDIA-Linux-x86_64-525.125.06.run
 
